@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<title>Techdays 2011 : démo Node.js</title>
+	</head>
+	<body>
+		<h1>Techdays 2011 : démo Node.js</h1>
+		<ul id="messages">
+			<li>#Techdays</li>
+		</ul>
+		<form action="#" id="send-message">
+			<label for="chat" id="nick">foo</label> :
+			<input type="text" id="chat" />
+			<input type="submit" name="Envoyer" id="button-message" />
+		</form>
+		<script src="/socket.io/socket.io.js"></script> 
+		<script src="jquery-1.5.min.js"></script> 
+		<script> 
+			var socket = new io.Socket(); 
+			socket.connect();
+			socket.on('connect', function(){
+				socket.send($("#nick").text() + " s'est connecté");
+			}) 
+			socket.on('message', function(message) {
+				$("#messages").append("<li>").find("li:last").text(message);
+			}) 
+			socket.on('disconnect', function(){ console.log("disconnect"); }) 
+			$('#send-message').submit(function() {
+				socket.send($("#nick").text() + ' : ' + $("#chat").val());
+				$("#chat").val("");
+				return false;
+			});
+			$(window).unload(function() {
+				socket.send($("#nick").text() + " est parti");
+			})
+			$('#nick').text("toto" + Math.floor(Math.random() * 10000));
+		</script>
+	</body>
+</html>
