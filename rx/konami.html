@@ -1,0 +1,35 @@
+<html>
+<head>
+<script type="text/javascript" src="jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="rx.js"></script>
+<script type="text/javascript" src="rx.jQuery.js"></script>
+<!-- 
+Copyright Endy Tjahjono on StackOverflow
+http://stackoverflow.com/questions/4336645/how-to-detect-konami-code-with-rx-js-reactive-extensions-for-javascript 
+-->
+</head>
+<body>
+<p id="result"></p>
+<script type="text/javascript">
+    $(function() {
+        var konami = $(document).toObservable("keyup")
+			.Select(function(e) { return e.keyCode;}
+			.SkipWhile(function(k) { return (k != 38);})
+			.BufferWithCount(10)
+			.Where(function(ks) {
+				return ks.length == 10 &&
+					ks[0] == 38 && ks[1] == 38 &&
+					ks[2] == 40 && ks[3] == 40 &&
+					ks[4] == 37 && ks[5] == 39 &&
+					ks[6] == 37 && ks[7] == 39 &&
+					ks[8] == 66 && ks[9] == 65;
+        });
+
+        var konamisub = konami.Subscribe(function(e) {
+            $("#result").text("KONAMI!");
+            $("#result").fadeIn().fadeOut();
+        })
+    })
+</script>
+</body>
+</html>
