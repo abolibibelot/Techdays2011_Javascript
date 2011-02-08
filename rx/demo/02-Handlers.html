@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Handlers</title>
+    <script src="Scripts/jquery-1.4.4.min.js" type="text/javascript"></script>
+    <script src="Scripts/rx.js" type="text/javascript"></script>
+    <script src="Scripts/rx.joins.js" type="text/javascript"></script>
+    <script src="Scripts/rx.aggregates.js" type="text/javascript"></script>
+    <script src="Scripts/rx.jQuery.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        var source = Rx.Observable.Range(5, 30);
+
+        source = source.Where(function (x) {
+            return x % 2 == 0;
+        });
+
+        source = source.Where(function (x) { return x > 22; });
+
+//        var observer = source.Subscribe(
+//            function (next) { $("<p/>").html("OnNext " + next).appendTo("#content"); },
+//            function (ex) { $("<p/>").html("OnError " + x).appendTo("#content"); },
+//            function () { $("<p/>").html("OnEnd " + x).appendTo("#content"); }
+//            );
+
+        var obs2 = source.Subscribe(
+            function (next) {
+                $("<li/>").html("<strong>" + next + "</strong>")
+                                       .appendTo("#other");
+            });
+
+    });
+
+
+</script>
+
+</head>
+
+
+
+<body>
+
+<p id="content"></p>
+
+<ul id="other"></ul>
+
+</body>
+</html>

@@ -1,14 +1,17 @@
 <html>
 <head>
-<script type="text/javascript" src="jquery-1.4.4.min.js"></script>
-<script type="text/javascript" src="rx.js"></script>
-<script type="text/javascript" src="rx.jQuery.js"></script>
+<script type="text/javascript" src="demo/Scripts/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="demo/Scripts/rx.js"></script>
+<script type="text/javascript" src="demo/Scripts/rx.jQuery.js"></script>
 <!-- 
 Copyright Endy Tjahjono on StackOverflow
 http://stackoverflow.com/questions/4336645/how-to-detect-konami-code-with-rx-js-reactive-extensions-for-javascript 
 -->
 </head>
 <body>
+
+<img src="Konami_Code.png" />
+
 <p id="result"></p>
 <script type="text/javascript">
     $(function() {
@@ -25,6 +28,13 @@ http://stackoverflow.com/questions/4336645/how-to-detect-konami-code-with-rx-js-
 					ks[8] == 66 && ks[9] == 65;
         });
 
+		var keys = $(document).toObservable("keyup")
+				    .Select(function(e) {return e.KeyCode;});
+				   
+				   
+		keys.Subscribe(function(e) {$("<p/>").text(e).appendTo("#result");});
+		keys.Subscribe(function(e) {alert(e);});
+		
         var konamisub = konami.Subscribe(function(e) {
             $("#result").text("KONAMI!");
             $("#result").fadeIn().fadeOut();

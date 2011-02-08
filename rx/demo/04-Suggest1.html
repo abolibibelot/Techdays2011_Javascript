@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Handlers</title>
+    <script src="Scripts/jquery-1.4.4.min.js" type="text/javascript"></script>
+    <script src="Scripts/rx.js" type="text/javascript"></script>
+    <script src="Scripts/rx.joins.js" type="text/javascript"></script>
+    <script src="Scripts/rx.aggregates.js" type="text/javascript"></script>
+    <script src="Scripts/rx.jQuery.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+    var log = function (message) {
+        $("<p/>").text(message).appendTo("#content");
+    };
+
+
+
+    $(document).ready(function () {
+
+        var input = $("#textbox").toObservable("keyup")
+                            .Select(function (event) { return $(event.target).val(); })
+                            .Throttle(1000)
+                            .DistinctUntilChanged();
+
+        var inputSubscription = 
+            input.Subscribe(function (text) { log("Vous avez écrit : " + text); });
+
+    });
+
+</script>
+
+</head>
+
+
+
+<body>
+
+<input type="text" id="textbox" size="60" />
+<p id="content">
+</p>
+
+
+
+</body>
+</html>

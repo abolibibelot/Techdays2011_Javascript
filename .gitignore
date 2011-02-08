@@ -1,8 +1,8 @@
-raw
-presentation
-test.coffee
-parser.output
-test/fixtures/underscore
-test/*.js
-examples/beautiful_code/parse.coffee
-*.gem
+obj
+bin
+_ReSharper.*
+*.csproj.user
+*.ReSharper.user
+*.ReSharper
+*.suo
+*.cache

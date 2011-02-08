@@ -1,0 +1,9 @@
+
+Do operator : fonction d'interception sans modification (utile pour débugger au milieu d'un workflow)
+
+keyup renvoie plusieurs fois la même chose : bon exemple pour filtrer (en javascript..en .NET plus intrusif)
+
+.Throttle(1000) : attend 1000ms avant de propager (utile pour le suggest). Si un message arrive avant le délai, le nouveau message remplace le précédent.
+
+
+

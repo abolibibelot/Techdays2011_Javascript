@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<!-- 
+    based on the Rx Hands On Lab and on Matthew Podwysocki's series on Rx for Js 
+    http://codebetter.com/matthewpodwysocki/2010/08/12/dojo-deferred-and-the-reactive-extensions-for-javascript/
+-->
+
+    <title>Handlers</title>
+    <script src="Scripts/jquery-1.4.4.min.js" type="text/javascript"></script>
+    <script src="Scripts/rx.js" type="text/javascript"></script>
+    <script src="Scripts/rx.joins.js" type="text/javascript"></script>
+    <script src="Scripts/rx.aggregates.js" type="text/javascript"></script>
+    <script src="Scripts/rx.jQuery.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+    log = message ->
+            $("<p/>").text(message).appendTo("#content")
+    
+
+    searchWikipedia = (term) ->
+        $.ajaxAsObservable({ url: "http://fr.wikipedia.org/w/api.php",
+                            dataType: "jsonp",
+                            data: { action: "opensearch",
+                                    search: term,
+                                    format: "json"}
+                           })
+            .Select(d -> if d.data.length == 2 then d.data[1] else []);
+            #Le résultat est de la forme
+            # ["terme de recherche", ["resultat1", "resultat2","resultat3"...]]
+            #ou rien sinon
+        
+      $(document).ready( ->
+                terms = $("#searchInput").toObservable("keyup")
+                            .Select((event) -> $(event.target).val())
+                            .Throttle(250)  //on n'observe que le dernier événement au bout de 250ms
+                            .DistinctUntilChanged()
+
+                searchObservable = terms.SelectMany searchWikipedia                 
+
+                observer1 = searchObservable.Subscribe(
+                    results ->
+                        $("#results").empty()
+                        $.each(results, (_, result) ->
+                            $("#results").append("<li>" + result + "</li>"),
+                    exn ->
+                        $("#error").text(error))
+        )
+
+</script>
+
+</head>
+
+
+
+<body> 
+<input id="searchInput" size="100" type="text" /> 
+<ul id="results" /> 
+<p id="error" /> 
+</body>
+
+
+</html>

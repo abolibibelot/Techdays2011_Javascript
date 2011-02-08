@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Handlers</title>
+    <script src="Scripts/jquery-1.4.4.min.js" type="text/javascript"></script>
+    <script src="Scripts/rx.js" type="text/javascript"></script>
+    <script src="Scripts/rx.joins.js" type="text/javascript"></script>
+    <script src="Scripts/rx.aggregates.js" type="text/javascript"></script>
+    <script src="Scripts/rx.jQuery.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+    var log = function(message){ $("#content").text(message);};
+
+    $(document).ready(function () {
+
+
+        var moves = $(document).toObservable("mousemove")
+                    .Select(function (event) {
+                        return { pageX: event.pageX, pageY: event.pageY };
+                    })
+                    .Where(function (pos) {
+                        return pos.pageX % 5 === 0
+                    && pos.pageY % 5 == 0;
+                    });
+
+        var keys = $("#textbox").toObservable("keyup")
+                             .Select(function (evt) {
+                                 return $(evt.target).val();
+                             });
+        //.BufferWithTimeOrCount(3,3,2000);
+
+
+        moves.Subscribe(function (pos) {
+            log("X: " + pos.pageX + " Y: " + pos.pageY);
+        });
+
+        keys.Subscribe(function (words)
+        { log("Vous avez écrit: " + words); });
+
+
+    });
+
+</script>
+
+</head>
+
+
+
+<body>
+
+<input type="text" id="textbox" size="60" />
+<p id="content">
+</p>
+
+
+
+</body>
+</html>
