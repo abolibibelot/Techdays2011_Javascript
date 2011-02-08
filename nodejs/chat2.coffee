@@ -16,15 +16,16 @@ messages = []
 clients = {}
 
 socket.on 'connection', (client) ->
-		       clients[client.sessionId] = client
-		       client.send(message) for message in messages
-		       null
+					clients[client.sessionId] = client
+					client.send(message) for message in messages					
 
-socket.on 'message', (message) ->
-		       message.push message
-		       clients[clientId].send(message) for clientId in clients
-		       null
+					client.on 'message', (message) ->
+							   messages.push message
+							   client.send(message) for id, client of clients
+							   null
 
-client.on 'disconnect', () ->
-               delete clients[client.sessionId]
-               null
+					client.on 'disconnect', () ->
+							   delete clients[client.sessionId]
+							   null
+							   
+					null
