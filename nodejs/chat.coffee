@@ -1,3 +1,7 @@
+http = require 'http'
+fs   = require 'fs'
+io   = require 'socket.io'
+
 server = http.createServer (req,res) -> 
      res.writeHead 200 , 'Content-Type': 'text/html; charset=utf-8'
      fs.readFile req.url.slice(1), (err,data) -> 
